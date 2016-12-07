@@ -10,6 +10,7 @@ function needAuth(req, res, next) {
   }
 }
 
+
 router.get('/', needAuth, function(req, res, next) {
   res.render('hosts');
 });
