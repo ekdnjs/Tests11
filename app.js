@@ -13,9 +13,6 @@ var configAuth = require('./config/auth');
 
 var routes = require('./routes/index'),
     users = require('./routes/users'),
-    todos = require('./routes/todos'),
-    tasks = require('./routes/tasks');
-    hosts = require('./routes/hosts');
     posts = require('./routes/posts');
 
 var routeAuth = require('./routes/auth');
@@ -68,9 +65,6 @@ configAuth(passport);
 
 app.use('/', routes);
 app.use('/users', users);
-app.use('/todos', todos);
-app.use('/tasks', tasks);
-app.use('/hosts', hosts);
 app.use('/posts', posts);
 
 routeAuth(app, passport);

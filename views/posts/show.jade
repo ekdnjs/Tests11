@@ -8,10 +8,23 @@ block content
       | 
       span at #{moment(post.createdAt).format('YYYY-MM-DD HH:mm:ss')} 
       | 
-      | (조회수 #{post.read})
-    p.well(style='white-space:pre;')= post.content
-    
-    h3 Comment (#{post.numComment})
+      | 
+      p
+      ul
+      li 도시: #{post.city}
+      li 상세 주소 : #{post.address}
+      li 가격(￦) : #{post.price}
+      li 방 개수 : #{post.room}
+      li 소개 및 주의사항 : #{post.content}
+      
+        
+
+    a.btn.btn-default(href='/posts') 목록
+
+
+
+
+    h3 후기 (#{post.numComment})
     table.table
       tr
         th email
@@ -34,4 +47,3 @@ block content
   
 
     
-    a.btn.btn-default(href='/posts') 목록

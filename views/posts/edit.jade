@@ -3,24 +3,94 @@ extends ../layout
 block content
   .container
     if post.id
-      h1.page-header 글수정
+      h1.page-header 수정하기
     else
-      h1.page-header 글쓰기
+      h1.page-header 나의 숙소 등록하기
 
     form(action = (post.id) ? "/posts/#{post.id}?_method=PUT" : "/posts", method='POST')
       .form-group
         label(for='email') Email address
         input.form-control(type='email', id='email', name='email', placeholder='Email', value=post.email)
-        label(for='password') Password
-        input.form-control(type='password', id='password', name='password', placeholder='Password')
       .form-group
         label(for='title') Title
         input.form-control(type='text', id='title', name='title', placeholder='title', value=post.title)
       .form-group
-        label(for='content') Content
-        textarea.form-control(id='content', rows='10', name='content', placeholder='content here')= post.content
+       label(for='city') 지역
+       select.selectpicker#city(name="city")
+         - repeations = ["서울특별시", "부산광역시","인천광역시","대구광역시","대전광역시","광주광역시","경기도 수원시","울산광역시","경상남도 창원시","경기도 고양시","경기도 용인시","경기도 성남시","경기도 부천시","충청북도 청주시","경기도 안산시","전라북도 전주시","충청남도 천안시","경기도 남양주시","경기도 화성시","경기도 안양시","경상남도 김해시","경상북도 포항시","경기도 평택시","제주특별자치도 제주시","경기도 시흥시","경기도 의정부시","경상북도 구미시","경기도 파주시","경기도 김포시","경상남도 진주시","경기도 광명시","강원도 원주시","충청남도 아산시","경기도 광주시","전라북도 익산시","경상남도 양산시","경기도 군포시","강원도 춘천시","경상북도 경산시","전라북도 군산시","전라남도 여수시","전라남도 순천시","경상북도 경주시","경상남도 거제시","전라남도 목포시","강원도 강릉시","경기도 오산시","충청북도 충주시","경기도 이천시","경기도 양주시","세종특별자치시","경기도 안성시","경기도 구리시","충청남도 서산시","경상북도 안동시","충청남도 당진시","경기도 포천시","경기도 의왕시","경기도 하남시","제주특별자치도 서귀포시","전라남도 광양시","경상북도 김천시","경상남도 통영시","충청북도 제천시","충청남도 논산시","충청남도 공주시","경상남도 사천시","전라북도 정읍시","경기도 여주시","경상북도 영주시","경상남도 밀양시","충청남도 보령시","경상북도 상주시","경상북도 영천시","경기도 동두천시","전라남도 나주시","강원도 동해시","전라북도 김제시","전라북도 남원시","강원도 속초시","경상북도 문경시","강원도 삼척시","경기도 과천시","강원도 태백시","충청남도 계룡시"]
+         - for item in repeations
+           option #{item}
+
+           
+        .form-group
+       label(for='address') 주소
+       input.form-control(type="text", id="postcode" placeholder="우편번호")
+       input.form-control(type="button" class="btn btn-info" onclick="execDaumPostcode()" value="우편번호 찾기")
+       input.form-control(type="text" id="address" placeholder="주소")
+       input.form-control(type="text" id="address2" placeholder="상세주소")
+
+      script(src="https://spi.maps.daum.net/imap/map_js_init/postcode.v2.js")
+      script.
+          function execDaumPostcode() {
+              new daum.Postcode({
+                  oncomplete: function(data) {
+                      // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+                      // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+                      // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                      var fullAddr = ''; // 최종 주소 변수
+                      var extraAddr = ''; // 조합형 주소 변수
+
+                      // 사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                      if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                          fullAddr = data.roadAddress;
+
+                      } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                          fullAddr = data.jibunAddress;
+                      }
+
+                      // 사용자가 선택한 주소가 도로명 타입일때 조합한다.
+                      if(data.userSelectedType === 'R'){
+                          //법정동명이 있을 경우 추가한다.
+                          if(data.bname !== ''){
+                              extraAddr += data.bname;
+                          }
+                          // 건물명이 있을 경우 추가한다.
+                          if(data.buildingName !== ''){
+                              extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                          }
+                          // 조합형주소의 유무에 따라 양쪽에 괄호를 추가하여 최종 주소를 만든다.
+                          fullAddr += (extraAddr !== '' ? ' ('+ extraAddr +')' : '');
+                      }
+
+                      // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                      document.getElementById('postcode').value = data.zonecode; //5자리 새우편번호 사용
+                      document.getElementById('address').value = fullAddr;
+
+                      // 커서를 상세주소 필드로 이동한다.
+                      document.getElementById('address2').focus();
+                  }
+              }).open();
+          }
+      .script
+
+       .form-group
+       label(for='price') 가격(￦)
+       input.form-control(type='text', id='price', name='price', placeholder='가격(￦)/1일', value=post.price)
+       .form-group
+       label(for='room') 방 개수
+       select.selectpicker#room(name="room")
+         - repeations = ["0","1","2","3","4","5","6","7","8","9","10","10개 이상"]
+         - for item in repeations
+           option #{item}
+
+      .form-group
+        label(for='content') 소개 및 주의 사항
+        textarea.form-control(id='content', rows='10', name='content', placeholder='소개 및 주의사항을 작성해주세요')= post.content
 
       div.form-actions
         a.btn.btn-default(href='javascript:window.history.back();') 뒤로 
         | 
         button.btn.btn-primary(type='submit') 완료
+
+     

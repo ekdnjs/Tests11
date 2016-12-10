@@ -11,7 +11,12 @@ var schema = new Schema({
   numComment: {type: Number, default: 0},
   createdAt: {type: Date, default: Date.now},
   updatedAt:{type:Date},
-  read : {type: Number, default: 0},
+  city: {type: String, required: true},
+  address: {type: String, required: true, trim: true},
+  address2: {type: String, required: true, trim: true},
+  postcode: {type: String, required: true},
+  price:{type: String, required: true, trim: true},
+  room:{type: String, required: true}
 }, 
   {
   toJSON: { virtuals: true},

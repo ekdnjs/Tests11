@@ -11,17 +11,17 @@
     #navbar.collapse.navbar-collapse
       ul.nav.navbar-nav
         li
-          a(href='/todos') Todo List
+          a(href='/posts') 숙소예약하기
         li
-          a(href='/hosts') 호스팅하기
-        li
-          a(href='posts') 숙소둘러보기
+          a(href='/posts/new') 숙소등록하기
       ul.nav.navbar-nav.navbar-right
         if (currentUser) 
-          li
-            a(href='/users/#{currentUser._id}') Profile
-          li
-            a(href='/signout') Signout
+            li
+              a(href='/users') 회원목록
+            li
+              a(href='/users/#{currentUser._id}') Profile
+            li
+              a(href='/signout') Signout
         else
           li
             a(href='/signin') Signin
