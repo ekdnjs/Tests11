@@ -1,0 +1,22 @@
+extends ../layout
+
+block content
+  .container
+    h1.page-header 예약하기
+    form(action='/reserves/#{post.id}', method='POST')
+        .form-group
+            label(for='people') 숙박인원
+            input.form-control(tyep='number', id='people', name='people', placeholder='0')
+        .form-group
+            label(for='checkin') Check In 날짜
+            input.form-control(type='date', id='checkin', name='checkin')
+        .form-group
+            label(for='checkout') Check Out 날짜
+            input.form-control(type='date', id='checkout', name='checkout')
+        .form-group
+            label(for='content') 여행 목적
+            textarea.form-control(id='content', rows='10', name='content', placeholder='content here')
+        div.form-actions
+            a.btn.btn-default(href='javascript:window.history.back();') 뒤로 
+            | 
+            button.btn.btn-primary(type='submit') 완료

@@ -1,0 +1,28 @@
+extends ../layout
+
+block content
+  .container
+    h1.page-header 나의 예약목록
+
+    table.table.table-bordered
+      thead
+        tr
+          th 제목
+          th 호스트(이메일)
+          th 숙박인원
+          th Check-in
+          th Check-out
+          th
+      tbody
+        each reserve in reserves
+          tr
+            td= reserve.title
+            td= reserve.hostemail
+            td= reserve.people
+            td= moment(reserve.checkin).format('YYYY-MM-DD')
+            td= moment(reserve.checkout).format('YYYY-MM-DD')
+            td
+              a.btn.btn-xs.btn-default(href='/reserves/#{reserve._id}?_method=DELETE') 예약취소
+
+
+    a.btn.btn-default(href='javascript:window.history.back();') 뒤로

@@ -22,7 +22,8 @@ block content
             td= post.city
             td= moment(post.createdAt).format('YYYY-MM-DD HH:mm:ss')
             td
-              a.btn.btn-xs.btn-default(data-id=post.id, class='reservation' href='/reservation') 예약
+              
+              a.btn.btn-xs.btn-default(data-id=post.id, class='reservation' href='/reserves/#{post.id}/') 예약
               | 
               a.btn.btn-xs.btn-default(href='/posts/#{post.id}/edit') 수정
               | 

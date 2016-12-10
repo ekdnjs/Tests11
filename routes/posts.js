@@ -15,6 +15,7 @@ function needAuth(req, res, next) {
   }
 }
 
+
 // Index
 router.get("/", function(req, res){
  Post.find({}, function(err, posts){
