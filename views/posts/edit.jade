@@ -24,10 +24,10 @@ block content
            
         .form-group
        label(for='address') 주소
-       input.form-control(type="text", id="postcode" placeholder="우편번호")
+       input.form-control(type="text", id="postcode" placeholder="우편번호" value=post.postcode )
        input.form-control(type="button" class="btn btn-info" onclick="execDaumPostcode()" value="우편번호 찾기")
-       input.form-control(type="text" id="address" placeholder="주소")
-       input.form-control(type="text" id="address2" placeholder="상세주소")
+       input.form-control(type="text" id="address" placeholder="주소" value=post.address)
+       input.form-control(type="text" id="address2" placeholder="상세주소" value=post.address2)
 
       script(src="https://spi.maps.daum.net/imap/map_js_init/postcode.v2.js")
       script.
@@ -85,7 +85,7 @@ block content
            option #{item}
 
       .form-group
-        label(for='content') 소개 및 주의 사항
+        label(for='content') 소개 및 편의, 주의 사항
         textarea.form-control(id='content', rows='10', name='content', placeholder='소개 및 주의사항을 작성해주세요')= post.content
 
       div.form-actions

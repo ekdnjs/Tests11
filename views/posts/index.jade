@@ -2,7 +2,7 @@ extends ../layout
 
 block content
   .container
-    h1.page-header List
+    h1.page-header 숙소둘러보기
     
     | total  posts
     table.table.table-bordered
@@ -22,7 +22,7 @@ block content
             td= post.city
             td= moment(post.createdAt).format('YYYY-MM-DD HH:mm:ss')
             td
-              a.btn.btn-xs.btn-default(data-id=post.id, class='reservation') 예약
+              a.btn.btn-xs.btn-default(data-id=post.id, class='reservation' href='/reservation') 예약
               | 
               a.btn.btn-xs.btn-default(href='/posts/#{post.id}/edit') 수정
               | 
