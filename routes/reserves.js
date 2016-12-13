@@ -90,7 +90,7 @@ router.get('/:id/finish',function(req,res,next){
                 return next(err);
             }
             if(post.reservation === '예약완료'){
-                req.flash('danger','이미 확정하셨습니다.');
+                req.flash('danger','이미 예약완료 하셨습니다.');
                 res.redirect('back');
             }
             post.reservation = "예약완료";
@@ -114,11 +114,11 @@ router.get('/:id', needAuth, function (req, res, next) {
                 return next(err);
             }
             if(req.user.email === post.email){
-                req.flash('danger','자신의 방입니다.');
+                req.flash('danger','본인의 방은 예약이 불가합니다.');
                 res.redirect('back');
             }
             if (post.reservation === '예약중' || post.reservation === '예약완료') {
-                req.flash('danger', '예약중입니다.');
+                req.flash('danger', '예약중.');
                 res.redirect('back');
             }
             res.render('reserves/new', { user: user, post: post });
@@ -160,7 +160,6 @@ router.post('/:id', function (req, res, next) {
             if (err) {
                 return next(err);
             } else {
-                // req.flash('success', '게시물 등록이 완료되었습니다.');
                 res.redirect('/posts/#{post.id}');
             }
         });
