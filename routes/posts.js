@@ -16,6 +16,7 @@ function needAuth(req, res, next) {
 }
 
 
+
 // Index
 router.get("/", function(req, res){
  Post.find({}, function(err, posts){
@@ -109,8 +110,6 @@ router.post('/', function(req, res, next) {
     title: req.body.title,
     city:  req.body.city,
     address: req.body.address,
-    address2: req.body.address2,
-    postcode: req.body.postcode,
     price: req.body.price,
     room: req.body.room,
     content:req.body.content

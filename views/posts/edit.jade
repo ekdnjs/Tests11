@@ -24,54 +24,68 @@ block content
            
         .form-group
        label(for='address') 주소
-       input.form-control(type="text", id="postcode" placeholder="우편번호" value=post.postcode )
-       input.form-control(type="button" class="btn btn-info" onclick="execDaumPostcode()" value="우편번호 찾기")
-       input.form-control(type="text" id="address" placeholder="주소" value=post.address)
-       input.form-control(type="text" id="address2" placeholder="상세주소" value=post.address2)
-
-      script(src="https://spi.maps.daum.net/imap/map_js_init/postcode.v2.js")
+      input.form-control#sample5_address(name='address', type='text', placeholder='주소')
+      br
+      input(type='button'  class='btn btn-info' onclick='sample5_execDaumPostcode()', value='주소 검색')
+      br
+      #map(style='width:300px;height:300px;margin-top:10px;display:none')
+      script(src='http://dmaps.daum.net/map_js_init/postcode.v2.js')
+      script(src='//apis.daum.net/maps/maps3.js?apikey=8d1b90ffd0931ae80a683202699d463c&libraries=services')
       script.
-          function execDaumPostcode() {
-              new daum.Postcode({
-                  oncomplete: function(data) {
-                      // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
-
-                      // 각 주소의 노출 규칙에 따라 주소를 조합한다.
-                      // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
-                      var fullAddr = ''; // 최종 주소 변수
-                      var extraAddr = ''; // 조합형 주소 변수
-
-                      // 사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
-                      if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
-                          fullAddr = data.roadAddress;
-
-                      } else { // 사용자가 지번 주소를 선택했을 경우(J)
-                          fullAddr = data.jibunAddress;
-                      }
-
-                      // 사용자가 선택한 주소가 도로명 타입일때 조합한다.
-                      if(data.userSelectedType === 'R'){
-                          //법정동명이 있을 경우 추가한다.
-                          if(data.bname !== ''){
-                              extraAddr += data.bname;
-                          }
-                          // 건물명이 있을 경우 추가한다.
-                          if(data.buildingName !== ''){
-                              extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
-                          }
-                          // 조합형주소의 유무에 따라 양쪽에 괄호를 추가하여 최종 주소를 만든다.
-                          fullAddr += (extraAddr !== '' ? ' ('+ extraAddr +')' : '');
-                      }
-
-                      // 우편번호와 주소 정보를 해당 필드에 넣는다.
-                      document.getElementById('postcode').value = data.zonecode; //5자리 새우편번호 사용
-                      document.getElementById('address').value = fullAddr;
-
-                      // 커서를 상세주소 필드로 이동한다.
-                      document.getElementById('address2').focus();
-                  }
-              }).open();
-          }
+        var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+        mapOption = {
+        center: new daum.maps.LatLng(37.537187, 127.005476), // 지도의 중심좌표
+        level: 5 // 지도의 확대 레벨
+        };
+        //지도를 미리 생성
+        var map = new daum.maps.Map(mapContainer, mapOption);
+        //주소-좌표 변환 객체를 생성
+        var geocoder = new daum.maps.services.Geocoder();
+        //마커를 미리 생성
+        var marker = new daum.maps.Marker({
+        position: new daum.maps.LatLng(37.537187, 127.005476),
+        map: map
+        });
+        function sample5_execDaumPostcode() {
+        new daum.Postcode({
+        oncomplete: function(data) {
+        // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+        // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+        var fullAddr = data.address; // 최종 주소 변수
+        var extraAddr = ''; // 조합형 주소 변수
+        // 기본 주소가 도로명 타입일때 조합한다.
+        if(data.addressType === 'R'){
+        //법정동명이 있을 경우 추가한다.
+        if(data.bname !== ''){
+        extraAddr += data.bname;
+        }
+        // 건물명이 있을 경우 추가한다.
+        if(data.buildingName !== ''){
+        extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+        }
+        // 조합형주소의 유무에 따라 양쪽에 괄호를 추가하여 최종 주소를 만든다.
+        fullAddr += (extraAddr !== '' ? ' ('+ extraAddr +')' : '');
+        }
+        // 주소 정보를 해당 필드에 넣는다.
+        document.getElementById("sample5_address").value = fullAddr;
+        // 주소로 좌표를 검색
+        geocoder.addr2coord(data.address, function(status, result) {
+        // 정상적으로 검색이 완료됐으면
+        if (status === daum.maps.services.Status.OK) {
+        // 해당 주소에 대한 좌표를 받아서
+        var coords = new daum.maps.LatLng(result.addr[0].lat, result.addr[0].lng);
+        // 지도를 보여준다.
+        mapContainer.style.display = "block";
+        map.relayout();
+        // 지도 중심을 변경한다.
+        map.setCenter(coords);
+        // 마커를 결과값으로 받은 위치로 옮긴다.
+        marker.setPosition(coords)
+        }
+        });
+        }
+        }).open();
+        }
       .script
 
        .form-group

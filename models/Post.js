@@ -4,7 +4,7 @@ var mongoose = require('mongoose'),
 
 //post의 schema 설정
 var schema = new Schema({
-  email: {type: String, required: true, index: true, unique: true, trim: true},
+  email: {type: String, required: true, index: true, trim: true},
   password: {type: String},
   title: {type: String},
   content: {type: String},
@@ -12,9 +12,7 @@ var schema = new Schema({
   createdAt: {type: Date, default: Date.now},
   updatedAt:{type:Date},
   city: {type: String, required: true},
-  address: {type: String, required: true, trim: true},
-  address2: {type: String, required: true, trim: true},
-  postcode: {type: String, required: true},
+  address: {type: String, required: true},
   price:{type: String, required: true, trim: true},
   room:{type: String, required: true}
 }, 
